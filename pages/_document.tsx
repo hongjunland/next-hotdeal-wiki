@@ -7,13 +7,11 @@ HTML의 전역 문서를 정의합니다.
 export default function Document() {
   return (
     <Html lang="en">
-      document start
       <Head />
       <body>
         <Main />
         <NextScript />
       </body>
-      document end
     </Html>
   );
 }
