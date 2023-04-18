@@ -25,13 +25,13 @@ export default function GlobalNav() {
   return (
     <StyledNav>
       <StyledContainer>
-        <Grid container alignItems="center" justifyContent="space-between">
+        <Grid container alignItems="center" justifyContent="space-between" margin={'auto'}>
           <Grid item>
             <Link href={"/"}>
               <StyledLogo />
             </Link>
           </Grid>
-          <Grid item>
+          <Grid item paddingRight={'0.5rem'}>
             <StyledSearchButton onClick={handleSearchButtonClick}>
               <SearchIcon />
               Search…

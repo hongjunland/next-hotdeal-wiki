@@ -32,6 +32,7 @@ export const StyledContainer = styled(Container)(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "center",
   height: "100%",
+  padding: 0,
   [theme.breakpoints.down("md")]: {
     flexDirection: "column",
     alignItems: "flex-start",
@@ -47,6 +48,7 @@ export const StyledLogo = styled(Logo)(({ theme }) => ({
 
 export const StyledSearchButton = styled(SearchButton)(({ theme }) => ({
   height: "2rem",
+  marginRight: '0.5rem',
   [theme.breakpoints.down("sm")]: {
     height: "1.5rem",
   },
