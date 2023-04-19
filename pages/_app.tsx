@@ -15,7 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* <ThemeProvider theme={theme}> */}
       <StyledEngineProvider injectFirst>
         <GlobalNav />
-        <Component {...pageProps} />
+        <main>
+          <Component {...pageProps} />
+        </main>
       </StyledEngineProvider>
       {/* </ThemeProvider> */}
     </>
