@@ -9,7 +9,7 @@ import {
   StyledLogo,
   StyledSearchButton,
 } from "./GlobalNav.styles";
-import SearchModal from "./\bSearchModal";
+import SearchModal from "./SearchModal";
 
 export default function GlobalNav() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
