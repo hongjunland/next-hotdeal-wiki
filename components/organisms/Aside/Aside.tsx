@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import RecentHotdealList from "./RecentHotdealList";
+import RecentWikiList from "./RecentWikiList";
 
 const StyledAside = styled("aside")`
   padding-top: 4rem;
@@ -16,7 +16,7 @@ const StyledAside = styled("aside")`
 export default function Aside() {
   return (
     <StyledAside>
-      <RecentHotdealList />
+      <RecentWikiList />
     </StyledAside>
   );
 }

@@ -1,19 +1,19 @@
-import { RecentHotdeal } from "@/types/Hotdeal/RecentHotdeal";
+import { RecentWiki } from "@/types/Hotdeal/RecentHotdeal";
 import { formatTime } from "@/utils/date";
 import { Typography, styled } from "@mui/material";
 import Link from "next/link";
 
-interface RecentHotdealItemProps {
-  hotdeal: RecentHotdeal;
+interface RecentWikiItemProps {
+  wiki: RecentWiki;
 }
 
-export default function RecentHotdealItem({ hotdeal }: RecentHotdealItemProps) {
+export default function RecentWikiItem({ wiki }: RecentWikiItemProps) {
   return (
     <StyledWrapper>
-      <Link href={`/hotdeal/${hotdeal.title}`}>
-        <Typography color="primary">{hotdeal.title}</Typography>
+      <Link href={`/wiki/${wiki.title}`}>
+        <Typography color="primary">{wiki.title}</Typography>
         <Typography color="secondary">
-          {formatTime(hotdeal.updatedAt)}
+          {formatTime(wiki.updatedAt)}
         </Typography>
       </Link>
     </StyledWrapper>

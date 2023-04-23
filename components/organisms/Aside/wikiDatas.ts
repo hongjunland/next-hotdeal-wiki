@@ -1,6 +1,6 @@
-import { RecentHotdeal } from "@/types/Hotdeal/RecentHotdeal";
+import { RecentWiki } from "@/types/Hotdeal/RecentHotdeal";
 
-export const hotdealsData: RecentHotdeal[] = [
+export const wikiDatas: RecentWiki[] = [
     {
       id: 1,
       title: "LG gram 노트북",

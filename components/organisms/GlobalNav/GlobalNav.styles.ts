@@ -9,6 +9,7 @@ export const StyledNav = styled("nav")(({ theme }) => ({
   zIndex: 9999,
   height: "3rem",
   padding: "0.5rem",
+  background: 'white',
   [theme.breakpoints.down("sm")]: {
     height: "2.5rem",
   },
