@@ -1,4 +1,4 @@
-import { Wiki, WikiVersion } from "@/types/Hotdeal/RecentWiki";
+import { Wiki, WikiVersion } from "@/types/Hotdeal/wiki";
 import { atom } from "recoil";
 
 export const wikiVersionState = atom<WikiVersion>({

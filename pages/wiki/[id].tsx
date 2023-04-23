@@ -22,7 +22,6 @@ export default function WikiPage() {
   const router = useRouter();
   const { id } = router.query;
   useEffect(() => {
-    
   }, []);
   return (
     <Template>
