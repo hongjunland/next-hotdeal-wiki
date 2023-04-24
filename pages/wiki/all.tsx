@@ -26,7 +26,6 @@ const Article = styled("article")`
 `;
 
 export default function AllWikiList() {
-  const setWikiPage = useSetRecoilState(wikiPageState);
   const { isLoading, error, data } = useQuery("allWiki", async () => {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
@@ -56,10 +55,7 @@ export default function AllWikiList() {
   });
 
   useEffect(() => {
-    if (data) {
-      setWikiPage(data);
-    }
-  }, [data, setWikiPage]);
+  }, [data]);
 
   if (isLoading) {
     return <div style={{ margin: "auto auto" }}>Loading...</div>;
@@ -96,7 +92,7 @@ interface WikiItemProps {
 function WikiItem({ wiki }: WikiItemProps) {
   return (
     <div>
-      <Link href={`/wiki/${wiki.title}`}>{wiki.title}</Link>
+      <Link href={`/wiki/${wiki.id}`}>{wiki.title}</Link>
     </div>
   );
 }

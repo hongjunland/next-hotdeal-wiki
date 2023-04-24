@@ -1,10 +1,16 @@
 import { Template } from "@/templates/Template";
-import { Box, Button, Typography, styled } from "@mui/material";
+import { Box, Link, Typography, styled } from "@mui/material";
 import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
+
+const Content = styled("textarea")`
+  width: 80%;
+  min-height: 50vh;
+  word-wrap: break-word;
+  margin: 1rem;
+`;
 
 const Article = styled("article")`
   font-size: 60px;
@@ -17,11 +23,8 @@ const Article = styled("article")`
     width: 100%;
   }
 `;
-const Content = styled("div")`
-  width: 100%;
-  word-wrap: break-word;
-`;
-export default function WikiPage() {
+
+export default function EditPage() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -64,11 +67,15 @@ export default function WikiPage() {
   return (
     <Template>
       <Article>
-        <Box borderBottom={"1px solid gray"} paddingBottom={"2rem"} display={'flex'}>
+        <Box
+        //   borderBottom={"1px solid gray"}
+        //   paddingBottom={"2rem"}
+          display={"flex"}
+        >
           <Typography variant="h1">{data.title}</Typography>
-          <Link href={`/edit/${id}`}>수정</Link>
+          <Link href={`/wiki/${id}`}>뒤로</Link>
         </Box>
-        <Content>{data.content}</Content>
+        <Content defaultValue={data.content}/>
       </Article>
     </Template>
   );
