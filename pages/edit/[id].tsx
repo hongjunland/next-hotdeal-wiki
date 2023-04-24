@@ -1,40 +1,103 @@
+import Article from "@/components/organisms/Article";
 import { Template } from "@/templates/Template";
-import { Box, Link, Typography, styled } from "@mui/material";
+import { UpdateWikiInput, Wiki } from "@/types/Hotdeal/wiki";
+import { Box, Button, Typography, styled } from "@mui/material";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useQuery } from "react-query";
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import MarkdownIt from "markdown-it";
+import { useQueryClient } from "react-query";
 
-const Content = styled("textarea")`
-  width: 80%;
-  min-height: 50vh;
-  word-wrap: break-word;
-  margin: 1rem;
-`;
+const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
+  ssr: false,
+});
+const mdParser = new MarkdownIt();
 
-const Article = styled("article")`
-  font-size: 60px;
-  margin-bottom: 200px;
-  padding-top: 4rem;
-  @media (width > 950px) {
-    width: calc(100% - 300px);
+import "react-markdown-editor-lite/lib/index.css";
+import { useMutation } from "react-query";
+import router from "next/router";
+
+interface EditPageProps {
+  wiki: Wiki;
+}
+
+export default function EditPage({ wiki }: EditPageProps) {
+  const [content, setContent] = useState(wiki.content);
+  const queryClient = useQueryClient();
+  function handleEditorChange({ html, text }: { html: string; text: string }) {
+    setContent(text);
   }
-  @media screen and (max-width: 950px) {
-    width: 100%;
-  }
-`;
+  const mutateUpdateWiki = useMutation((input: UpdateWikiInput) =>
+  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/graphql`, {
+    query: `
+      mutation {
+        updateWiki(updateWikiInput: {
+          id: ${input.id}
+          title: "${input.title}"
+          content: "${input.content}"
+        }) {
+          id
+          title
+          content
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+  }).then((response) => response.data)
+);
 
-export default function EditPage() {
-  const router = useRouter();
-  const { id } = router.query;
+  const handleUpdateClick = () => {
+    mutateUpdateWiki.mutate({
+      id: parseInt(wiki.id),
+      title: wiki.title,
+      content: content,
+    });
+    queryClient.invalidateQueries("wiki");
+    router.push(`/wiki/${wiki.id}`);
+  };
 
-  const { isLoading, error, data } = useQuery("wiki", async () => {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
-      {
-        query: `
+  useEffect(() => {
+    console.log(wiki);
+  }, [wiki]);
+
+  return (
+    <Template>
+      <Article>
+        <Box
+          borderBottom={"1px solid gray"}
+          paddingBottom={"2rem"}
+          display={"flex"}
+        >
+          <Typography variant="h1">{wiki.title}</Typography>
+          <Button
+            onClick={handleUpdateClick}
+          >
+            수정완료
+          </Button>
+        </Box>
+        <div>
+          <MdEditor
+            value={content}
+            onChange={handleEditorChange}
+            renderHTML={(text) => mdParser.render(text)}
+          />
+          <div dangerouslySetInnerHTML={{ __html: mdParser.render(content) }} />
+        </div>
+      </Article>
+    </Template>
+  );
+}
+
+export async function getServerSideProps(context: { query: { id: string } }) {
+  const { id } = context.query;
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+    {
+      query: `
         query{
-          wiki(id:1){
+          wiki(id:${id}){
               id
               content
               title
@@ -48,35 +111,13 @@ export default function EditPage() {
           }
           }
       `,
-      }
-    );
-    return response.data.data.wiki;
-  });
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
-  if (isLoading) {
-    return <div style={{ margin: "auto auto" }}>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: (error)</div>;
-  }
-  return (
-    <Template>
-      <Article>
-        <Box
-        //   borderBottom={"1px solid gray"}
-        //   paddingBottom={"2rem"}
-          display={"flex"}
-        >
-          <Typography variant="h1">{data.title}</Typography>
-          <Link href={`/wiki/${id}`}>뒤로</Link>
-        </Box>
-        <Content defaultValue={data.content}/>
-      </Article>
-    </Template>
+    }
   );
+
+  return {
+    props: {
+      wiki: response.data.data.wiki,
+    },
+  };
 }
+

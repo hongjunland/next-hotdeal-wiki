@@ -1,28 +1,16 @@
+import Article from "@/components/organisms/Article/Article";
 import { wikiPageState } from "@/recoil/atoms/wikiPageState";
 import { Template } from "@/templates/Template";
 import { Wiki, WikiPage } from "@/types/Hotdeal/wiki";
-import { Typography, styled } from "@mui/material";
+import { Box, Typography, styled } from "@mui/material";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-import { useSetRecoilState } from "recoil";
 
 const Content = styled("div")`
   width: 100%;
   word-wrap: break-word;
-`;
-
-const Article = styled("article")`
-  font-size: 60px;
-  margin-bottom: 200px;
-  padding-top: 4rem;
-  @media (width > 950px) {
-    width: calc(100% - 300px);
-  }
-  @media screen and (max-width: 950px) {
-    width: 100%;
-  }
 `;
 
 export default function AllWikiList() {
@@ -54,8 +42,7 @@ export default function AllWikiList() {
     return response.data.data.listWiki;
   });
 
-  useEffect(() => {
-  }, [data]);
+  useEffect(() => {}, [data]);
 
   if (isLoading) {
     return <div style={{ margin: "auto auto" }}>Loading...</div>;
@@ -68,13 +55,13 @@ export default function AllWikiList() {
   return (
     <Template>
       <Article>
-        <Typography
-          variant="h1"
+        <Box
           borderBottom={"1px solid gray"}
           paddingBottom={"2rem"}
+          display={"flex"}
         >
-          리스트
-        </Typography>
+          <Typography variant="h1">리스트</Typography>
+        </Box>
         <Content>
           {data.items.map((wiki: Wiki) => (
             <WikiItem wiki={wiki} key={wiki.id} />
