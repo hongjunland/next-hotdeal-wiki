@@ -1,3 +1,4 @@
+import { Content } from "@/components/organisms/Article";
 import Article from "@/components/organisms/Article/Article";
 import { Template } from "@/templates/Template";
 import { Wiki, WikiPage } from "@/types/Hotdeal/wiki";
@@ -6,11 +7,6 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-
-const Content = styled("div")`
-  width: 100%;
-  word-wrap: break-word;
-`;
 
 export default function AllWikiList() {
   const { isLoading, error, data } = useQuery("allWiki", async () => {
@@ -78,7 +74,7 @@ interface WikiItemProps {
 function WikiItem({ wiki }: WikiItemProps) {
   return (
     <div>
-      <Link href={`/wiki/${wiki.id}`}>{wiki.title}</Link>
+      <Link href={`/wiki/${wiki.title}`}>{wiki.title}</Link>
     </div>
   );
 }

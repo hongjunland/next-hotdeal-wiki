@@ -1,13 +1,12 @@
 import Article from "@/components/organisms/Article";
 import { Template } from "@/templates/Template";
 import { UpdateWikiInput, Wiki } from "@/types/Hotdeal/wiki";
-import { Box, Button, Typography, styled } from "@mui/material";
+import { Box, Button} from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import MarkdownIt from "markdown-it";
-import { QueryClient, useQueryClient } from "react-query";
 
 const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
   ssr: false,
@@ -15,7 +14,6 @@ const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
 const mdParser = new MarkdownIt();
 
 import "react-markdown-editor-lite/lib/index.css";
-import { useMutation } from "react-query";
 import router from "next/router";
 
 interface EditPageProps {
@@ -23,14 +21,18 @@ interface EditPageProps {
 }
 
 export default function EditPage({ wiki }: EditPageProps) {
+
   const [content, setContent] = useState(wiki.content);
-  const queryClient = useQueryClient();
+  
   function handleEditorChange({ html, text }: { html: string; text: string }) {
     setContent(text);
   }
-  const mutateUpdateWiki = useMutation((input: UpdateWikiInput) =>
-  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/graphql`, {
-    query: `
+  
+  const updateWiki = async (input: UpdateWikiInput) => {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+      {
+        query: `
       mutation {
         updateWiki(updateWikiInput: {
           id: ${input.id}
@@ -45,22 +47,17 @@ export default function EditPage({ wiki }: EditPageProps) {
         }
       }
     `,
-  }).then(e=> {
-    queryClient.invalidateQueries("wiki");
-    
-  }).finally(e=>{
-    router.push(`/wiki/${wiki.id}`);
-  })
-);
+      }
+    );
+    router.push(`/wiki/${wiki.title}`);
+  };
 
-  const handleUpdateClick =  () => {
-     mutateUpdateWiki.mutate({
+  const handleUpdateClick = () => {
+    updateWiki({
       id: parseInt(wiki.id),
       title: title,
       content: content,
-    })
-     
-    
+    });
   };
   const [title, setTitle] = useState(wiki.title);
   useEffect(() => {
@@ -75,13 +72,12 @@ export default function EditPage({ wiki }: EditPageProps) {
           paddingBottom={"2rem"}
           display={"flex"}
         >
-          {/* <Typography variant="h1">{wiki.title}</Typography> */}
-          <input type="text" value={title} onChange={(e)=>setTitle(e.target.value)}/>
-          <Button
-            onClick={handleUpdateClick}
-          >
-            수정완료
-          </Button>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Button onClick={handleUpdateClick}>수정완료</Button>
         </Box>
         <div>
           <MdEditor
@@ -96,33 +92,84 @@ export default function EditPage({ wiki }: EditPageProps) {
   );
 }
 
-export async function getServerSideProps(context: { query: { id: string } }) {
-  const { id } = context.query;
+export async function getStaticPaths() {
+  console.log('getStaticPaths');
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     {
       query: `
-        query{
-          wiki(id:${id}){
-              id
-              content
+        query {
+          listWiki {
+            items {
               title
-              versions{
-                  id
-                  title
-                  content
-                  diff
-                  createdAt
-              }
+            }
           }
-          }
-      `,
+        }
+    `,
     }
   );
+  console.log(response.data.data.listWiki.items);
+  const wikis = response.data.data.listWiki.items;
+
   return {
-    props: {
-      wiki: response.data.data.wiki,
-    },
+    paths: wikis.map((wiki: WikiTitle) => ({
+      params: { title: wiki.title.toString() },
+    })),
+    fallback: true,
+  };
+}
+interface GetStaticPropsContext {
+  params: {
+    title: string;
   };
 }
 
+interface WikiTitle {
+  title: string;
+}
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const { title } = context.params;
+  console.log("getStaticProps");
+  console.log(title);
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+    {
+      query: `
+      query{
+        wikiByTitle(title:"${title}"){
+            id
+            content
+            title
+            versions{
+                id
+                title
+                content
+                diff
+                createdAt
+            }
+        }
+        }
+    
+      `,
+    }
+  );
+  console.log(response.data.data.wikiByTitle);
+  if (
+    !response ||
+    !response.data ||
+    !response.data.data ||
+    !response.data.data.wikiByTitle
+  ) {
+    return {
+      props: {},
+    };
+  }
+  const wiki = response.data.data.wikiByTitle;
+
+  return {
+    props: {
+      wiki,
+    },
+    revalidate: 1,
+  };
+}
