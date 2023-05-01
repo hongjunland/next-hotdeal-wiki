@@ -10,6 +10,7 @@ export interface UpdateWikiInput {
 }
 
 export interface Wiki {
+    data: any;
     id: string;
     title: string;
     content: string;

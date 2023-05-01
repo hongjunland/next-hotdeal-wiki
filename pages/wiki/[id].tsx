@@ -1,25 +1,20 @@
 import Article from "@/components/organisms/Article";
 import { Template } from "@/templates/Template";
-import { Wiki } from "@/types/Hotdeal/wiki";
+import { Wiki, WikiPage } from "@/types/Hotdeal/wiki";
 import { Box, Typography, styled } from "@mui/material";
 import axios from "axios";
 import Link from "next/link";
-import { useEffect } from "react";
-
-interface WikiPageProps {
-  wiki: Wiki;
-}
 
 const Content = styled("div")`
   width: 100%;
   word-wrap: break-word;
 `;
 
-export default function WikiPage({ wiki }: WikiPageProps) {
-  useEffect(() => {
-    console.log(wiki);
-  }, [wiki]);
+interface WikiPageProps {
+  wiki: Wiki;
+}
 
+export default function WikiPage({wiki} : WikiPageProps) {
   return (
     <Template>
       <Article>
@@ -36,36 +31,69 @@ export default function WikiPage({ wiki }: WikiPageProps) {
     </Template>
   );
 }
-
-export async function getServerSideProps(context: {
-  query: { id: string };
-}) {
-  const { id } = context.query;
+interface WikiId {
+  id: string;
+}
+export async function getStaticPaths() {
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     {
       query: `
-        query{
-          wiki(id:${id}){
+    query {
+      listWiki {
+        items {
+          id
+        }
+      }
+    }
+    `,
+    }
+  );
+  const wikis = response.data.data.listWiki.items;
+
+  return {
+    paths: wikis.map((wiki: WikiId) => ({
+      params: { id: wiki.id.toString() },
+    })),
+    fallback: false,
+  };
+}
+interface GetStaticPropsContext {
+  params: {
+    id: string;
+  };
+}
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const { id } = context.params;
+
+  const response = await axios.post<Wiki>(
+    `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+    {
+      query: `
+        query {
+          wiki(id: ${id}) {
+            id
+            title
+            content
+            versions {
               id
-              content
               title
-              versions{
-                  id
-                  title
-                  content
-                  diff
-                  createdAt
-              }
+              content
+              diff
+              createdAt
+            }
           }
-          }
+        }
       `,
     }
   );
 
+  const wiki = response.data.data.wiki;
+
   return {
     props: {
-      wiki: response.data.data.wiki,
+      wiki,
     },
   };
 }

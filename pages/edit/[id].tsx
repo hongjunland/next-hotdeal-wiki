@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import MarkdownIt from "markdown-it";
-import { useQueryClient } from "react-query";
+import { QueryClient, useQueryClient } from "react-query";
 
 const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
   ssr: false,
@@ -45,19 +45,24 @@ export default function EditPage({ wiki }: EditPageProps) {
         }
       }
     `,
-  }).then((response) => response.data)
+  }).then(e=> {
+    queryClient.invalidateQueries("wiki");
+    
+  }).finally(e=>{
+    router.push(`/wiki/${wiki.id}`);
+  })
 );
 
-  const handleUpdateClick = () => {
-    mutateUpdateWiki.mutate({
+  const handleUpdateClick =  () => {
+     mutateUpdateWiki.mutate({
       id: parseInt(wiki.id),
-      title: wiki.title,
+      title: title,
       content: content,
-    });
-    queryClient.invalidateQueries("wiki");
-    router.push(`/wiki/${wiki.id}`);
+    })
+     
+    
   };
-
+  const [title, setTitle] = useState(wiki.title);
   useEffect(() => {
     console.log(wiki);
   }, [wiki]);
@@ -70,7 +75,8 @@ export default function EditPage({ wiki }: EditPageProps) {
           paddingBottom={"2rem"}
           display={"flex"}
         >
-          <Typography variant="h1">{wiki.title}</Typography>
+          {/* <Typography variant="h1">{wiki.title}</Typography> */}
+          <input type="text" value={title} onChange={(e)=>setTitle(e.target.value)}/>
           <Button
             onClick={handleUpdateClick}
           >
@@ -113,7 +119,6 @@ export async function getServerSideProps(context: { query: { id: string } }) {
       `,
     }
   );
-
   return {
     props: {
       wiki: response.data.data.wiki,

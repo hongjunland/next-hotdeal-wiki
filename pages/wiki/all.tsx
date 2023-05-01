@@ -1,5 +1,4 @@
 import Article from "@/components/organisms/Article/Article";
-import { wikiPageState } from "@/recoil/atoms/wikiPageState";
 import { Template } from "@/templates/Template";
 import { Wiki, WikiPage } from "@/types/Hotdeal/wiki";
 import { Box, Typography, styled } from "@mui/material";
