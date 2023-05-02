@@ -1,40 +1,18 @@
+import { wikiAPI } from "@/api/wikiAPI";
 import { Content } from "@/components/organisms/Article";
 import Article from "@/components/organisms/Article/Article";
 import { Template } from "@/templates/Template";
-import { Wiki, WikiPage } from "@/types/Hotdeal/wiki";
-import { Box, Typography, styled } from "@mui/material";
-import axios from "axios";
+import { Nullable, Wiki } from "@/types/Hotdeal/wiki";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 
 export default function AllWikiList() {
   const { isLoading, error, data } = useQuery("allWiki", async () => {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
-      {
-        query: `
-        query {
-          listWiki {
-            items {
-              id
-              content
-              title
-              versions {
-                id
-                title
-                content
-                diff
-                createdAt
-              }
-            }
-            total
-          }
-        }
-      `,
-      }
-    );
-    return response.data.data.listWiki;
+    const wikiPage = await wikiAPI.fetchAllWikis();
+    console.log(wikiPage);
+    return wikiPage;
   });
 
   useEffect(() => {}, [data]);
@@ -46,7 +24,6 @@ export default function AllWikiList() {
   if (error) {
     return <div>Error: (error)</div>;
   }
-
   return (
     <Template>
       <Article>
@@ -58,9 +35,9 @@ export default function AllWikiList() {
           <Typography variant="h1">리스트</Typography>
         </Box>
         <Content>
-          {data.items.map((wiki: Wiki) => (
-            <WikiItem wiki={wiki} key={wiki.id} />
-          ))}
+          {data?.items?.map((wiki: Wiki) => {
+            return <WikiItem wiki={wiki} key={wiki.id} />;
+          })}
         </Content>
       </Article>
     </Template>

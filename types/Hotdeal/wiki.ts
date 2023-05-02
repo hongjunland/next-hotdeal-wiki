@@ -10,7 +10,6 @@ export interface UpdateWikiInput {
 }
 
 export interface Wiki {
-    data: any;
     id: string;
     title: string;
     content: string;
@@ -20,7 +19,7 @@ export interface Wiki {
 }
 
 export interface WikiPage {
-    items: Nullable<Wiki>[];
+    items: Nullable<Wiki[]>;
     total: number;
 }
 
@@ -32,6 +31,10 @@ export interface WikiVersion {
     diff?: Nullable<string>;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface WikiTitle{
+    title: string;
 }
 
 export interface IQuery {
@@ -46,4 +49,4 @@ export interface IMutation {
     removeWiki(id: number): Nullable<Wiki> | Promise<Nullable<Wiki>>;
 }
 
-type Nullable<T> = T | null;
+export type Nullable<T> = T | null;
