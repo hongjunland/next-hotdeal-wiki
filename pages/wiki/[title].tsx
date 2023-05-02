@@ -41,6 +41,7 @@ export default function WikiPage({ wiki }: WikiPageProps) {
           justifyContent={'space-between'}
         >
           <Typography variant="h1">{wiki.title}</Typography>
+          <Link href={`/history/${wiki.title}`}>변경기록</Link>
           <Link href={`/edit/${wiki.title}`}>수정</Link>
         </Box>
         <Content>{wiki.content}</Content>

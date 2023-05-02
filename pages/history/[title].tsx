@@ -4,9 +4,8 @@ import Content from "@/components/organisms/Article/Content";
 import NotFound from "@/components/organisms/Wiki/Notfound";
 import { Template } from "@/templates/Template";
 import { Wiki, WikiPage, WikiVersion } from "@/types/Hotdeal/wiki";
-import { Box, List, ListItem, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 interface WikiPageProps {
   wiki: Wiki;
@@ -27,13 +26,22 @@ export default function HistoryPage({ wiki }: WikiPageProps) {
         </Box>
         <Content>
           <div>
-            <List>
+            <ul>
               <>
-                {wiki.versions.map((item: WikiVersion) => {
-                  <ListItem key={item.id}>{item.title}</ListItem>;
-                })}
+                {wiki.versions.map((wikiVersion: WikiVersion) => (
+                  <li key={wikiVersion.id}>
+                    <Typography>
+                      {wikiVersion.createdAt} -{" "}
+                      <Link
+                        href={`/wiki/${wiki.title}?version=${wikiVersion.id}`}
+                      >
+                        [보기]
+                      </Link>
+                    </Typography>
+                  </li>
+                ))}
               </>
-            </List>
+            </ul>
           </div>
         </Content>
       </Article>
