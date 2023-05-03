@@ -14,56 +14,49 @@ const mdParser = new MarkdownIt();
 import "react-markdown-editor-lite/lib/index.css";
 import { useRouter } from "next/router";
 import { wikiAPI } from "@/api/wikiAPI";
+import { QueryClient, dehydrate, useQuery } from "react-query";
 
-interface EditPageProps {
-  wiki: Wiki;
-}
-
-export default function EditPage({ wiki }: EditPageProps) {
+export default function EditPage() {
   const router = useRouter();
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
+  const queryClient = new QueryClient();
+  const [ title, setTitle] = useState(router.query.title);
+  const { data: wiki, status } = useQuery("wiki", () =>
+    wikiAPI.fetchWikiByTitle(title as string)
+  );
+  const [content, setContent] = useState(wiki?.content || '');
 
-  const createWiki = async (input: CreateWikiInput) => {
-    await wikiAPI.createWiki(input);
-    router.push(`/wiki/${title}`);
-  };
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+  if (status === "error") {
+    return <div>error...</div>;
+  }
 
-  const handleUpdateClick = async () => {
-    await wikiAPI.updateWiki({
-      id: parseInt(wiki.id),
-      title: title,
-      content: content,
-    } as UpdateWikiInput);
-    router.push(`/wiki/${title}`);
-  };
-
-  const handleCreateClick = async () => {
-    await createWiki({
-      title: wiki.title,
-      content: content,
-    } as CreateWikiInput);
-    console.log(wiki.title);
-    router.push(`/wiki/${wiki.title}`);
-  };
-  useEffect(() => {
-    console.log(wiki);
-  }, [wiki]);
-
-  if (router.isFallback || !wiki) {
+  if (router.isFallback) {
     return (
       <>
         <div>Not found router!!!!</div>
       </>
     );
   }
+  const handleCreateClick = async () => {
+    const input = {title: title, content: content} as CreateWikiInput;
+    console.log(title, content);
+    await wikiAPI.createWiki(input);
+    queryClient.invalidateQueries('wiki');
+    router.push(`/wiki/${title}`);
+  };
 
-  if (wiki.id === "0") {
+  if (!wiki) {
     return (
       <Template>
         <Article>
-          <Box borderBottom={"1px solid gray"} display={"flex"} justifyContent={'space-between'}>
-            <Typography variant="h1">{wiki.title}</Typography>
+          <Box
+            borderBottom={"1px solid gray"}
+            display={"flex"}
+            justifyContent={"space-between"}
+          >
+            <Typography variant="h1">{title}</Typography>
             <Button onClick={handleCreateClick}>작성완료</Button>
           </Box>
           <div>
@@ -80,6 +73,15 @@ export default function EditPage({ wiki }: EditPageProps) {
       </Template>
     );
   }
+  const handleUpdateClick = async () => {
+    await wikiAPI.updateWiki({
+      id: parseInt(wiki.id),
+      title: title,
+      content: content,
+    } as UpdateWikiInput);
+    queryClient.invalidateQueries('wiki');
+    router.push(`/wiki/${title}`);
+  };
 
   function handleEditorChange({ html, text }: { html: string; text: string }) {
     setContent(text);
@@ -92,7 +94,7 @@ export default function EditPage({ wiki }: EditPageProps) {
           paddingBottom={"2rem"}
           borderBottom={"1px solid gray"}
           display={"flex"}
-          justifyContent={'space-between'}
+          justifyContent={"space-between"}
         >
           <input
             type="text"
@@ -133,22 +135,14 @@ interface GetStaticPropsContext {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   const { title } = context.params;
-  const wiki = await wikiAPI.fetchWikiByTitle(title);
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery("wiki", () =>
+    wikiAPI.fetchWikiByTitle(title)
+  );
 
-  if (!wiki) {
-    return {
-      props: {
-        wiki: {
-          id: "0",
-          title: title,
-          content: "",
-        },
-      },
-    };
-  }
   return {
     props: {
-      wiki,
+      dehydratedState: dehydrate(queryClient),
     },
     revalidate: 1,
   };

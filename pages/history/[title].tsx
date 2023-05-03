@@ -1,17 +1,39 @@
 import { wikiAPI } from "@/api/wikiAPI";
 import Article from "@/components/organisms/Article";
 import Content from "@/components/organisms/Article/Content";
-import NotFound from "@/components/organisms/Wiki/Notfound";
 import { Template } from "@/templates/Template";
 import { Wiki, WikiPage, WikiVersion } from "@/types/Hotdeal/wiki";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { QueryClient, dehydrate, useQuery } from "react-query";
 
-interface WikiPageProps {
-  wiki: Wiki;
-}
 
-export default function HistoryPage({ wiki }: WikiPageProps) {
+export default function HistoryPage() {
+  const router = useRouter();
+  const { title } = router.query;
+  const { data: wiki, status } = useQuery('wiki', ()=>wikiAPI.fetchWikiByTitle(title as string));
+  if (status === 'loading') {
+    return <div>Loading...</div>
+  }
+  if (status === 'error') {
+    return <div>error...</div>
+  }
+
+  if (router.isFallback) {
+    return (
+      <>
+        <div>Not found router!!!!</div>
+      </>
+    );
+  }
+  if (!wiki) {
+    return (
+      <>
+        <div>Not found data!!!!</div>
+      </>
+    );
+  }
   console.log(wiki.versions);
   return (
     <Template>
@@ -69,11 +91,12 @@ interface GetStaticPropsContext {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   const { title } = context.params;
-  const wiki = await wikiAPI.fetchWikiByTitle(title);
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery('wiki', ()=>wikiAPI.fetchWikiByTitle(title));
 
   return {
     props: {
-      wiki,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 }
