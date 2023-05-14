@@ -64,7 +64,8 @@ function wikiApi(baseUrl: string) {
             }
             `,
     });
-    return response.data.data.wikiByTitle ?? null;
+    const wiki = response.data.data.wikiByTitle;
+    return wiki ?? null;
   }
 
   async function createWiki(createWikiInput: CreateWikiInput) {

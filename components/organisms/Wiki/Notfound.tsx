@@ -3,7 +3,7 @@ import Article, { Content } from "../Article";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 interface Props{
-    title: string;
+    title: string | string[];
 }
 export default function NotFound({title}: Props) {
   return (
@@ -17,7 +17,7 @@ export default function NotFound({title}: Props) {
         </Box>
         <Content>
           <Typography variant="h3">해당 문서가 존재하지 않습니다.</Typography>
-          <Link href={`/edit/${title}`}>
+          <Link href={`/write/${title}`}>
             <Typography>새 문서 만들기</Typography>
           </Link>
         </Content>
