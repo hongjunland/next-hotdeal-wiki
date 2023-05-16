@@ -117,11 +117,12 @@ function wikiApi(baseUrl: string) {
     const response = await axios.post(baseUrl, {
       query: `
           query {
-            listWiki {
+            listWiki(limit:10) {
               items {
                 id
                 content
                 title
+                updatedAt
                 versions {
                   id
                   title
@@ -135,37 +136,13 @@ function wikiApi(baseUrl: string) {
           }
         `,
     });
-    return response.data.data.listWiki;
+    const wikiPage: WikiPage = response.data.data.listWiki;
+    wikiPage?.items?.sort(
+      (a: Wiki, b: Wiki) =>
+        parseInt(b.updatedAt as string) - parseInt(a.updatedAt as string)
+    );
+    return wikiPage;
   }
-  // async function fetchWikiByTitleAndVersion({
-  //   title,
-  //   versionId,
-  // }: {
-  //   title: string;
-  //   versionId: number;
-  // }) {
-  //   {
-  //     const response = await axios.post(baseUrl, {
-  //       query: `
-  //       query{
-  //           wikiByTitle(title:"${title}"){
-  //               id
-  //               content
-  //               title
-  //               versions{
-  //                   id
-  //                   title
-  //                   content
-  //                   diff
-  //                   createdAt
-  //               }
-  //           }
-  //           }
-  //           `,
-  //     });
-  //     return response.data.data.wikiByTitle.versions ?? null;
-  //   }
-  // }
 
   return {
     fetchWikiById,

@@ -4,24 +4,21 @@ import Article from "@/components/organisms/Article";
 import NotFound from "@/components/organisms/Wiki/Notfound";
 import { Template } from "@/templates/Template";
 import { Wiki, WikiPage, WikiVersion } from "@/types/Hotdeal/wiki";
-import { Block, BlockNoteEditor } from "@blocknote/core";
+import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QueryClient, dehydrate, useQuery } from "react-query";
 
 export default function WikiPage() {
   const router = useRouter();
-  const { title } = router.query;
-  
+  const { title, versionId } = router.query;
   const { data: wiki, status } = useQuery("wiki", () =>
     wikiAPI.fetchWikiByTitle(title as string)
   );
-  if (router.query.versionId) {
-    console.log(router.query.versionId);
-  }
+  const [wikiVersion, setWikiVersion] = useState<WikiVersion>();
   const decodeContent = (encodedContent: string) => {
     const decodedContent = encodedContent
       ? JSON.parse(encodedContent?.replaceAll(`'`, `"`))
@@ -30,9 +27,14 @@ export default function WikiPage() {
   };
 
   const [blocks, setBlocks] = useState<Block[]>(
-    decodeContent(wiki?.content || "")
+    versionId
+      ? decodeContent(
+          wiki?.versions.find((item: WikiVersion) => item.id === versionId)
+            ?.content || ""
+        )
+      : decodeContent(wiki?.content || "")
   );
-  
+
   const editor: BlockNoteEditor | null = useBlockNote({
     editable: false,
     initialContent: blocks || [],
@@ -40,8 +42,25 @@ export default function WikiPage() {
       setBlocks(editor.topLevelBlocks);
     },
   });
-
-  const url = router.asPath;
+  useEffect(() => {
+    if (wiki && editor) {
+      if (!versionId) {
+        setWikiVersion(wiki.versions[0]);
+        editor.replaceBlocks(editor.topLevelBlocks, decodeContent(wiki.versions[0].content))
+      } else {
+        const newWikiVersion = wiki.versions.find(
+          (item: WikiVersion) => item.id === versionId
+        );
+        if (newWikiVersion) {
+          setWikiVersion(newWikiVersion);
+          editor.replaceBlocks(editor.topLevelBlocks, decodeContent(newWikiVersion.content))
+        }
+        else{
+          router.push(`/wiki/${wiki.title}`)
+        }
+      }
+    }
+  }, [versionId, wiki, wikiVersion, setBlocks, editor]);
   if (status === "loading") {
     return <div>Loading...</div>;
   }
@@ -57,16 +76,15 @@ export default function WikiPage() {
     );
   }
 
-  if (!wiki) {
+  if (!wiki || !wikiVersion) {
     const suffix = "/wiki/";
     // const pos = url.lastIndexOf(suffix);
     if (title) {
       // const title =
       //   pos !== -1 ? router.asPath.substring(pos + suffix.length) : router.asPath;
-      return <NotFound title={title} />;
+      return <NotFound title={title} versionId={versionId} />;
     }
   }
-
   return (
     <Template>
       <Article>
@@ -75,9 +93,18 @@ export default function WikiPage() {
           display={"flex"}
           justifyContent={"space-between"}
         >
-          <Typography variant="h1">{title}</Typography>
-          <Link href={`/history/${title}`}><Typography color={'#333'}>역사</Typography></Link>
-          <Link href={`/edit/${title}`}><Typography color={'#333'}>수정</Typography></Link>
+          <Typography variant="h1">
+            {wikiVersion?.title}
+            {versionId && `(version: ${versionId})`}
+          </Typography>
+          <Link href={`/history/${title}`}>
+            <Typography color={"#333"}>역사</Typography>
+          </Link>
+          {!versionId && (
+            <Link href={`/edit/${title}`}>
+              <Typography color={"#333"}>수정</Typography>
+            </Link>
+          )}
         </Box>
         <div>
           <BlockNoteView editor={editor} />
@@ -85,9 +112,6 @@ export default function WikiPage() {
       </Article>
     </Template>
   );
-}
-interface WikiTitle {
-  title: string;
 }
 export async function getStaticPaths() {
   const wikis = await wikiAPI.fetchAllWikis();

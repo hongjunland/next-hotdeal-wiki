@@ -4,8 +4,9 @@ import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 interface Props{
     title: string | string[];
+    versionId: string | undefined | string[];
 }
-export default function NotFound({title}: Props) {
+export default function NotFound({title, versionId}: Props) {
   return (
     <Template>
       <Article>
@@ -13,7 +14,7 @@ export default function NotFound({title}: Props) {
           borderBottom={"1px solid gray"}
           display={"flex"}
         >
-          <Typography variant="h1">{title}</Typography>
+          <Typography variant="h1">{title} {versionId && `(${versionId})`}</Typography>
         </Box>
         <Content>
           <Typography variant="h3">해당 문서가 존재하지 않습니다.</Typography>

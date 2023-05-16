@@ -1,19 +1,21 @@
 import { RecentWiki } from "@/types/Hotdeal/RecentHotdeal";
-import { formatTime } from "@/utils/date";
+import { Wiki } from "@/types/Hotdeal/wiki";
+import { dateUtil } from "@/utils/date";
 import { Typography, styled } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface RecentWikiItemProps {
-  wiki: RecentWiki;
+  wiki: Wiki;
 }
 
 export default function RecentWikiItem({ wiki }: RecentWikiItemProps) {
   return (
     <StyledWrapper>
-      <Link href={`/wiki/${wiki.title}`}>
+      <Link href={`/wiki/${wiki.title}`} key={wiki.id}>
         <Typography color="primary">{wiki.title}</Typography>
         <Typography color="secondary">
-          {formatTime(wiki.updatedAt)}
+          {dateUtil.formatTime(wiki.updatedAt) || ''}
         </Typography>
       </Link>
     </StyledWrapper>

@@ -7,7 +7,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { wikiAPI } from "@/api/wikiAPI";
-import { QueryClient, dehydrate, useQuery } from "react-query";
+import { QueryClient} from "react-query";
 interface Props {
   title: string;
 }

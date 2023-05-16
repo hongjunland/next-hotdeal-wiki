@@ -1,5 +1,7 @@
 import { styled } from "@mui/material";
 import RecentWikiList from "./RecentWikiList";
+import { useQuery } from "react-query";
+import { wikiAPI } from "@/api/wikiAPI";
 
 const StyledAside = styled("aside")`
   padding-top: 4rem;
@@ -14,9 +16,10 @@ const StyledAside = styled("aside")`
   }
 `;
 export default function Aside() {
+  const {data: wikis} = useQuery("wikis", wikiAPI.fetchAllWikis)
   return (
     <StyledAside>
-      <RecentWikiList />
+      <RecentWikiList wikis={wikis?.items|| []}/>
     </StyledAside>
   );
 }

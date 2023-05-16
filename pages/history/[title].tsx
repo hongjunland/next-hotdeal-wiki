@@ -55,7 +55,7 @@ export default function HistoryPage() {
                     <Typography>
                       {wikiVersion.createdAt} -{" "}
                       <Link
-                        href={`/wiki/${wiki.title}?version=${wikiVersion.id}`}
+                        href={`/wiki/${wiki.title}?versionId=${wikiVersion.id}`}
                       >
                         [보기]
                       </Link>

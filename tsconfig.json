@@ -17,9 +17,6 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "types": [
-      "markdown-it"
-    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "styles/theme.ts"],
   "exclude": ["node_modules"]
