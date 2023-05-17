@@ -66,7 +66,7 @@ export default function WikiPage() {
         }
       }
     }
-  }, [versionId, wiki, wikiVersion, setBlocks, editor]);
+  }, [versionId, wiki, wikiVersion, setBlocks, editor, router]);
   if (status === "loading") {
     return <div>Loading...</div>;
   }
