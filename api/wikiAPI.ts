@@ -143,6 +143,25 @@ function wikiApi(baseUrl: string) {
     );
     return wikiPage;
   }
+  async function searchWikis(word: string): Promise<Wiki[]> {
+    const response = await axios.post(baseUrl, {
+      query: `
+        query {
+            searchWiki(searchTerm: "${word}" , searchType:"title") {
+              items {
+                id
+                content
+                title
+              }
+            }
+        }
+        `,
+    });
+    console.log(response);
+    const wikiPage: WikiPage = response.data.data.searchWiki;
+    wikiPage?.items?.sort((a: Wiki, b: Wiki) => a.title.localeCompare(b.title));
+    return wikiPage?.items || [];
+  }
 
   return {
     fetchWikiById,
@@ -152,6 +171,7 @@ function wikiApi(baseUrl: string) {
     updateWiki,
     deleteWiki,
     fetchAllWikis,
+    searchWikis,
   };
 }
 

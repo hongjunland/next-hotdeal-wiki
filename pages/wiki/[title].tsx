@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { QueryClient, dehydrate, useQuery } from "react-query";
+import GlobalNav from "@/components/organisms/GlobalNav";
 
 export default function WikiPage() {
   const router = useRouter();
@@ -46,17 +47,22 @@ export default function WikiPage() {
     if (wiki && editor) {
       if (!versionId) {
         setWikiVersion(wiki.versions[0]);
-        editor.replaceBlocks(editor.topLevelBlocks, decodeContent(wiki.versions[0].content))
+        editor.replaceBlocks(
+          editor.topLevelBlocks,
+          decodeContent(wiki.versions[0].content)
+        );
       } else {
         const newWikiVersion = wiki.versions.find(
           (item: WikiVersion) => item.id === versionId
         );
         if (newWikiVersion) {
           setWikiVersion(newWikiVersion);
-          editor.replaceBlocks(editor.topLevelBlocks, decodeContent(newWikiVersion.content))
-        }
-        else{
-          router.push(`/wiki/${wiki.title}`)
+          editor.replaceBlocks(
+            editor.topLevelBlocks,
+            decodeContent(newWikiVersion.content)
+          );
+        } else {
+          router.push(`/wiki/${wiki.title}`);
         }
       }
     }
@@ -76,7 +82,7 @@ export default function WikiPage() {
     );
   }
 
-  if (!wiki || !wikiVersion) {
+  if (!wiki || (!wikiVersion && versionId)) {
     const suffix = "/wiki/";
     // const pos = url.lastIndexOf(suffix);
     if (title) {
@@ -86,31 +92,33 @@ export default function WikiPage() {
     }
   }
   return (
-    <Template>
-      <Article>
-        <Box
-          borderBottom={"1px solid gray"}
-          display={"flex"}
-          justifyContent={"space-between"}
-        >
-          <Typography variant="h1">
-            {wikiVersion?.title}
-            {versionId && `(version: ${versionId})`}
-          </Typography>
-          <Link href={`/history/${title}`}>
-            <Typography color={"#333"}>역사</Typography>
-          </Link>
-          {!versionId && (
-            <Link href={`/edit/${title}`}>
-              <Typography color={"#333"}>수정</Typography>
+    <>
+      <Template>
+        <Article>
+          <Box
+            borderBottom={"1px solid gray"}
+            display={"flex"}
+            justifyContent={"space-between"}
+          >
+            <Typography variant="h1">
+              {wikiVersion?.title}
+              {versionId && `(version: ${versionId})`}
+            </Typography>
+            <Link href={`/history/${title}`}>
+              <Typography color={"#333"}>역사</Typography>
             </Link>
-          )}
-        </Box>
-        <div>
-          <BlockNoteView editor={editor} />
-        </div>
-      </Article>
-    </Template>
+            {!versionId && (
+              <Link href={`/edit/${title}`}>
+                <Typography color={"#333"}>수정</Typography>
+              </Link>
+            )}
+          </Box>
+          <div>
+            <BlockNoteView editor={editor} />
+          </div>
+        </Article>
+      </Template>
+    </>
   );
 }
 export async function getStaticPaths() {

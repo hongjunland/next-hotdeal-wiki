@@ -2,7 +2,7 @@ import { wikiAPI } from "@/api/wikiAPI";
 import Article from "@/components/organisms/Article";
 import Content from "@/components/organisms/Article/Content";
 import { Template } from "@/templates/Template";
-import { Wiki, WikiPage, WikiVersion } from "@/types/Hotdeal/wiki";
+import { WikiVersion } from "@/types/Hotdeal/wiki";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -34,7 +34,6 @@ export default function HistoryPage() {
       </>
     );
   }
-  console.log(wiki.versions);
   return (
     <Template>
       <Article>
