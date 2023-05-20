@@ -4,17 +4,23 @@ import { Block, BlockNoteEditor } from "@blocknote/core";
 import Article from "@/components/organisms/Article";
 import { Template } from "@/templates/Template";
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { wikiAPI } from "@/api/wikiAPI";
-import { QueryClient} from "react-query";
-interface Props {
-  title: string;
-}
-export default function WritePage({ title }: Props) {
+
+export default function WritePage() {
   const router = useRouter();
-  const queryClient = new QueryClient();
   const [blocks, setBlocks] = useState<Block[]>();
+  
+  useEffect(() => {
+    if (router.query.title) {
+      wikiAPI.fetchWikiByTitle(router.query.title as string).then((item) => {
+        if (item) {
+          router.push(`/edit/${router.query.title}`);
+        }
+      });
+    }
+  }, [router]);
 
   const editor: BlockNoteEditor | null = useBlockNote({
     initialContent: blocks || [],
@@ -25,10 +31,9 @@ export default function WritePage({ title }: Props) {
 
   const handleCreateClick = async () => {
     const content = blocks ? JSON.stringify(blocks).replaceAll(`"`, `'`) : "";
-    const input = { title: title, content: content };
+    const input = { title: router.query.title?.toString(), content: content };
     await wikiAPI.createWiki(input);
-    queryClient.invalidateQueries("wiki");
-    router.replace(`/wiki/${title}`);
+    router.replace(`/wiki/${router.query.title}`);
   };
 
   return (
@@ -39,7 +44,7 @@ export default function WritePage({ title }: Props) {
           display={"flex"}
           justifyContent={"space-between"}
         >
-          <Typography variant="h1">{title}</Typography>
+          <Typography variant="h1">{router.query.title}</Typography>
           <Button onClick={handleCreateClick}>작성완료</Button>
         </Box>
         <div>
@@ -48,44 +53,4 @@ export default function WritePage({ title }: Props) {
       </Article>
     </Template>
   );
-}
-
-interface WikiTitle {
-  title: string;
-}
-export async function getStaticPaths() {
-  const wikis = await wikiAPI.fetchAllWikiTitle();
-  return {
-    paths: wikis.map((wiki: WikiTitle) => ({
-      params: { title: wiki.title.toString() },
-    })),
-    fallback: true,
-  };
-}
-
-interface GetStaticPropsContext {
-  params: WikiTitle;
-}
-
-export async function getStaticProps(context: GetStaticPropsContext) {
-  const { title } = context.params;
-  const queryClient = new QueryClient();
-  const wiki = await wikiAPI.fetchWikiByTitle(title);
-  await queryClient.prefetchQuery("wiki", () =>
-    wikiAPI.fetchWikiByTitle(title)
-  );
-
-  if (wiki) {
-    return {
-      redirect: {
-        destination: `/edit/${context.params.title}`,
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {
-      title: title,
-    },
-  };
 }

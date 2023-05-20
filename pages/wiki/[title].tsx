@@ -4,14 +4,13 @@ import Article from "@/components/organisms/Article";
 import NotFound from "@/components/organisms/Wiki/Notfound";
 import { Template } from "@/templates/Template";
 import { Wiki, WikiPage, WikiVersion } from "@/types/Hotdeal/wiki";
-import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { Block, BlockNoteEditor } from "@blocknote/core";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { QueryClient, dehydrate, useQuery } from "react-query";
-import GlobalNav from "@/components/organisms/GlobalNav";
 
 export default function WikiPage() {
   const router = useRouter();
@@ -22,7 +21,9 @@ export default function WikiPage() {
   const [wikiVersion, setWikiVersion] = useState<WikiVersion>();
   const decodeContent = (encodedContent: string) => {
     const decodedContent = encodedContent
-      ? JSON.parse(encodedContent?.replaceAll(`'`, `"`))
+      ? JSON.parse(encodedContent
+        ?.replaceAll(`'`, `"`)
+        .replaceAll('\\n',','))
       : "";
     return decodedContent as Block[];
   };
