@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { QueryClient, dehydrate, useQuery } from "react-query";
+import Head from "next/head";
 
 export default function WikiPage() {
   const router = useRouter();
@@ -95,6 +96,9 @@ export default function WikiPage() {
   return (
     <>
       <Template>
+        <Head>
+          <title>{wiki?.title} - 핫딜위키</title>
+        </Head>
         <Article>
           <Box
             borderBottom={"1px solid gray"}

@@ -4,6 +4,7 @@ import Content from "@/components/organisms/Article/Content";
 import { Template } from "@/templates/Template";
 import { WikiVersion } from "@/types/Hotdeal/wiki";
 import { Box, Typography } from "@mui/material";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { QueryClient, dehydrate, useQuery } from "react-query";
@@ -36,6 +37,9 @@ export default function HistoryPage() {
   }
   return (
     <Template>
+      <Head>
+        <title>{wiki.title} - 핫딜위키</title>
+      </Head>
       <Article>
         <Box
           borderBottom={"1px solid gray"}

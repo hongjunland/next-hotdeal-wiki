@@ -7,6 +7,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { wikiAPI } from "@/api/wikiAPI";
+import Head from "next/head";
 
 export default function WritePage() {
   const router = useRouter();
@@ -38,6 +39,9 @@ export default function WritePage() {
 
   return (
     <Template>
+      <Head>
+        <title>{router.query.title} - 핫딜위키</title>
+      </Head>
       <Article>
         <Box
           borderBottom={"1px solid gray"}
