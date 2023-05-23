@@ -49,4 +49,12 @@ export interface IMutation {
     removeWiki(id: number): Nullable<Wiki> | Promise<Nullable<Wiki>>;
 }
 
+export interface Hotdeal{
+    id: number;
+    title: string;
+    createdAt : string;
+    price: number;
+    url: string;
+    status: "INPROGRESS"|"COMPLETED"|"REJECTED"
+}
 export type Nullable<T> = T | null;
