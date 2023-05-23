@@ -8,9 +8,11 @@ import {
   Box,
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -94,6 +96,25 @@ interface FormState {
 }
 export default function EditPage() {
   const [hotdeals, setHotdeals] = useState<Hotdeal[]>(hotdealsData);
+  const [open, setOpen] = useState(false);
+  const [formState, setFormState] = useState<FormState>({
+    title: "",
+    price: 0,
+    url: "",
+  });
+  const submitModal = () => {
+    const newHotdeal: Hotdeal = {
+      id: hotdeals.length ? hotdeals[hotdeals.length - 1].id + 1 : 1,
+      title: formState.title,
+      createdAt: new Date().toISOString(),
+      price: formState.price,
+      url: formState.url,
+      status: "INPROGRESS",
+    };
+    setHotdeals([...hotdeals, newHotdeal]);
+    setFormState({ title: "", price: 0, url: "" } as FormState);
+    setOpen(false);
+  };
   const columns: GridColDef[] = [
     {
       field: "createdAt",
@@ -216,7 +237,7 @@ export default function EditPage() {
             아이폰14 Pro
           </Typography>
           <Box marginLeft="auto">
-            <Button variant="contained" color="info" onClick={() => {}}>
+            <Button variant="contained" color="info" onClick={()=>setOpen(true)}>
               <AddIcon />
             </Button>
           </Box>
@@ -235,7 +256,7 @@ export default function EditPage() {
             }}
             pageSizeOptions={[5]}
             disableRowSelectionOnClick
-            style={{margin: 0}}
+            style={{ margin: 0 }}
           />
         </Box>
         <Box display="flex" justifyContent="flex-end" gap={1} paddingTop={1}>
@@ -255,6 +276,42 @@ export default function EditPage() {
             저장
           </Button>
         </Box>
+        <Dialog open={open} onClose={()=>setOpen(false)} >
+          <DialogTitle>새로운 Hotdeal 생성</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="제목"
+              value={formState.title}
+              onChange={(e) => setFormState({...formState, title: e.target.value})}
+              fullWidth
+              autoFocus
+              margin="dense"
+            />
+            <TextField
+              label="가격"
+              value={formState.price}
+              type="number"
+              onChange={(e) => setFormState({...formState, price: parseInt(e.target.value)})}
+              autoFocus
+              fullWidth
+              margin="dense"
+            />
+            <TextField
+              label="링크"
+              value={formState.url}
+              onChange={(e) => setFormState({...formState, url: e.target.value})}
+              autoFocus
+              fullWidth
+              margin="dense"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={()=>setOpen(false)}>취소</Button>
+            <Button onClick={submitModal} variant="contained" color="primary">
+              생성
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Article>
     </Template>
   );
