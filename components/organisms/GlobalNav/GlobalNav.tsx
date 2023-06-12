@@ -1,48 +1,49 @@
-import Link from "next/link";
-import SearchIcon from "@mui/icons-material/Search";
-import { Grid } from "@mui/material";
-import { useState } from "react";
+import Container from "@/components/atoms/Container";
+import Logo from "@/components/atoms/Logo";
+import styled from "@emotion/styled";
+import { Button, IconButton, Typography } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Search } from "@mui/icons-material";
 
-import {
-  StyledNav,
-  StyledContainer,
-  StyledLogo,
-  StyledSearchButton,
-} from "./GlobalNav.styles";
-import SearchModal from "./SearchModal";
 
 export default function GlobalNav() {
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-
-  const handleSearchButtonClick = () => {
-    setSearchModalOpen(true);
-  };
-
-  const handleCloseSearchModal = () => {
-    setSearchModalOpen(false);
-  };
-
   return (
-    <StyledNav>
-      <StyledContainer>
-        <Grid container alignItems="center" justifyContent="space-between" margin={'auto'}>
-          <Grid item>
-            <Link href={"/"}>
-              <StyledLogo />
-            </Link>
-          </Grid>
-          <Grid item paddingRight={'0.5rem'}>
-            <StyledSearchButton onClick={handleSearchButtonClick}>
-              <SearchIcon />
-              Search…
-            </StyledSearchButton>
-          </Grid>
-        </Grid>
-      </StyledContainer>
-      <SearchModal
-        open={searchModalOpen}
-        onClose={handleCloseSearchModal}
-      />
-    </StyledNav>
+    <nav className={"global-nav"}>
+      <NavContainer>
+        <Logo src={"/logo.svg"} alt={"logo"}/>
+        <NavItem>
+          <SearchButton size="medium" startIcon={<Search/>}><Typography color={"#CCC"} variant="inherit">search...</Typography></SearchButton>
+        </NavItem>
+      </NavContainer>
+    </nav>
   );
 }
+const StyledIcon = styled(MoreVertIcon)`
+  border: 1px solid rgba(245, 0, 87, 0.87);
+  border-radius: 4px;
+`;
+const NavContainer = styled(Container)`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  max-width: 1200px;
+`;
+
+const NavItem = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+`;
+
+const SearchButton = styled(Button)`
+  border: solid 1px;
+`;

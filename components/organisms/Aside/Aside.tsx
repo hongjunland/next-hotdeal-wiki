@@ -1,26 +1,23 @@
-import { styled } from "@mui/material";
-import RecentWikiList from "./RecentWikiList";
-import { useQuery } from "react-query";
-import { wikiAPI } from "@/api/wikiAPI";
+import styled from "@emotion/styled";
 
-const StyledAside = styled("aside")`
-  padding-top: 4rem;
-  position: sticky;
-  width: 300px;
-  height: 100vh;
-  top: 0;
-  overflow-y: auto;
-  min-width: 300px;
-  @media screen and (max-width: 950px) {
-    display: none;
-  }
-`;
 export default function Aside() {
-  const {data: wikis} = useQuery("wikis", wikiAPI.fetchAllWikis)
   return (
     <StyledAside>
-      <RecentWikiList wikis={wikis?.items|| []}/>
+      <ul>
+        <li>dsds</li>
+        <li>dsds</li>
+        <li>dsds</li>
+        <li>dsds</li>
+        <li>dsds</li>
+        <li>dsds</li>
+      </ul>
     </StyledAside>
   );
 }
-
+const StyledAside = styled.aside`
+  width: 300px;
+  /* border-left: 1px black solid; */
+  @media (max-width: 1200px) {
+    display: none;
+  }
+`;

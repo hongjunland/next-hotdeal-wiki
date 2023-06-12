@@ -1,16 +1,19 @@
-import Aside from "@/components/organisms/Aside/Aside";
-import { Box, Container, Grid, Stack, Typography, styled } from "@mui/material";
+import Container from "@/components/atoms/Container";
+import styled from "@emotion/styled";
 
 interface Props {
   children: React.ReactNode;
 }
 export function Template({ children }: Props) {
-  return (
-    <Container>
-      <Stack direction={'row'} paddingTop={'2rem'}>
-        {children}
-        <Aside />
-      </Stack>
-    </Container>
-  );
+  return <StyledContainer>{children}</StyledContainer>;
 }
+
+const StyledContainer = styled(Container)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+`;

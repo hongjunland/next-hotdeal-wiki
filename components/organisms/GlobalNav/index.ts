@@ -1,3 +1,2 @@
-import GlobalNav from "./GlobalNav";
 
-export default GlobalNav;
+export {default as GlobalNav} from './GlobalNav';

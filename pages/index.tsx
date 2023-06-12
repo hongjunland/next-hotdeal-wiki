@@ -5,7 +5,7 @@ import styles from "@/styles/Home.module.css";
 import { Template } from "@/templates/Template";
 import { Article } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { Content } from "@/components/organisms/Article";
+// import { Content } from "@/components/organisms/Article";
 
 export default function Home() {
   return (
@@ -13,17 +13,32 @@ export default function Home() {
       <Head>
         <title>Hotdeal Wiki - 핫딜위키</title>
       </Head>
-      <Article>
-        <Box
-          borderBottom={"1px solid gray"}
-          display={"flex"}
-          justifyContent={"space-between"}
-        >
-        </Box>
-        <Content>
-          Home
-        </Content>
-      </Article>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
+      <h1>dsds</h1>
     </Template>
   );
 }

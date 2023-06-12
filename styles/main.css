@@ -1,0 +1,13 @@
+.global-nav {
+    position: fixed;
+    z-index: 50;
+    /* z-index: var(--nav-index); */
+    width: 100%;
+    height: 50px;
+    /* height: var(--navbar-height); */
+    border-bottom: 1px solid transparent;
+    background-color: #fff;
+    /* background-color: var(--white); */
+    left: 0;
+    transition: background-color .2s ease;
+}
