@@ -1,11 +1,11 @@
-import Container from "@/components/atoms/Container";
 import { Template } from "@/templates/Template";
-import styled from "@emotion/styled";
 import { Product } from "@/components/organisms/Wiki/Product";
+import TabList from "@/components/organisms/Wiki/TabList/TabList";
 export default function WikiPage() {
   return (
     <Template>
       <Product />
+      <TabList/>
     </Template>
   );
 }

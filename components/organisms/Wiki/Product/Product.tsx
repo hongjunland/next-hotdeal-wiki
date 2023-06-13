@@ -82,8 +82,8 @@ const StyledContainer = styled(Container)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
   gap: 5px;
+  /* border-bottom: 1px #CCC solid; */
 `;
 const Figure = styled.figure`
   display: flex;

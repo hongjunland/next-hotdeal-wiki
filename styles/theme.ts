@@ -45,10 +45,13 @@ const typograph = {
 
 const palette = {
   primary: {
-    main: "#f50057",
+    main: "rgba(245, 0, 87, 0.87)",
   },
   secondary: {
-    main: "#333",
+    main: "rgba(96, 144, 192, 0.87)",
+  },
+  completed: {
+    main: "rgba(0, 0, 0, 0.40)",
   },
   success: {
     main: "#4caf50",
