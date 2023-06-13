@@ -131,7 +131,7 @@ const hotdealsData = [
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 5,
+    id: 12,
     date: "2023-06-09 11:23",
     title: "[쿠팡] 아이폰14프로 128 (1,247,500원)",
     status: "핫딜",

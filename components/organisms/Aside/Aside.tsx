@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
-import Link from "next/link";
 import React from "react";
 
 export default function Aside() {
@@ -26,6 +25,7 @@ const StyledAside = styled.aside`
   flex-direction: column;
   padding: 10px;
   padding-top: 50px;
+  border-left: 1px solid #CCC;
   @media (max-width: 1200px) {
     display: none;
   }
@@ -47,61 +47,61 @@ function AsideListItem({ wiki }: any) {
 }
 const wikiData = [
   {
-    id: 1,
+    id: 11,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 2,
+    id: 21,
     title: "IPhone14 Pro 256G 블랙",
     price: "1,335,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 3,
+    id: 31,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 4,
+    id: 41,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 5,
+    id: 51,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 6,
+    id: 61,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 7,
+    id: 71,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 8,
+    id: 81,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 9,
+    id: 91,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
   },
   {
-    id: 10,
+    id: 101,
     title: "IPhone14 Pro 128G 블랙",
     price: "1,235,233",
     url: "http://localhost:3000/wiki/1",
