@@ -4,13 +4,16 @@ import styled from "@emotion/styled";
 import { Button, IconButton, Typography } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Search } from "@mui/icons-material";
+import Link from "next/link";
 
 
 export default function GlobalNav() {
   return (
     <nav className={"global-nav"}>
       <NavContainer>
-        <Logo src={"/logo.svg"} alt={"logo"}/>
+        <Link href='/'>
+          <Logo src={"/logo.svg"} alt={"logo"}/>
+        </Link>
         <NavItem>
           <SearchButton size="medium" startIcon={<Search/>}><Typography color={"#CCC"} variant="inherit">search...</Typography></SearchButton>
         </NavItem>

@@ -12,11 +12,13 @@ export default function Table() {
         <Typography variant="h3" flex={1}>
           핫딜 목록
         </Typography>
-        {/* <Typography variant="h4">판매중만</Typography> */}
-        {/* <Switch size="medium"/> */}
       </TableHeader>
       <Box width={"100%"}>
-        <DataGrid columns={columns} rows={hotdealsData} />
+        <DataGrid columns={columns} rows={hotdealsData} 
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10 } },
+        }}
+        />
       </Box>
     </StyledContainer>
   );
@@ -71,7 +73,7 @@ const columns = [
     renderCell: (props: GridRenderCellParams) => {
       return (
         <Box justifyContent={'center'} alignContent={'center'}>
-          <Link href={props.value}>
+          <Link href={props.value} style={{display: 'flex'}}>
             <LinkIcon sx={{ color: "#333" }} />
           </Link>
         </Box>
