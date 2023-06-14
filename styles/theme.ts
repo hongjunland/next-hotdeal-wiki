@@ -50,6 +50,7 @@ const palette = {
   secondary: {
     main: "rgba(96, 144, 192, 0.87)",
   },
+  
   completed: {
     main: "rgba(0, 0, 0, 0.40)",
   },
