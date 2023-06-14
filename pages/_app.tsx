@@ -48,5 +48,6 @@ const Main = styled.main`
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
-  padding-top: 50px;
+  /* padding-top: 50px; */
+  padding: 50px 5px 0 5px;
 `;

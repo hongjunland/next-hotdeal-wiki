@@ -6,6 +6,7 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
+  TextField,
   Typography,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -35,75 +36,17 @@ export default function Product() {
           <MainContentHeader>
             <MainContentTitle>
               <Typography variant="h1" flex={1} marginBottom={0}>
-                IPhone14 Pro 128G 블랙
+                IPhone14 Pro 128G 블랙 - 편집
               </Typography>
-              <IconButton
-                sx={{
-                  border: "solid 1px #cccccc",
-                  borderRadius: "4px",
-                  padding: "4px",
-                  width: "32px",
-                  height: "32px",
-                }}
-                color="primary"
-                onClick={handleButtonClick}
-              >
-                <MoreHorizIcon fontSize="medium" />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={() => router.push("/edit/1")}>
-                  <ListItemIcon>
-                    <EditIcon fontSize="small" />
-                  </ListItemIcon>
-                  위키 편집
-                </MenuItem>
-              </Menu>
             </MainContentTitle>
-            <PriceWrapper>
-              <Typography variant="h3" flex={1}>
-                현재최저가
-              </Typography>
-              <Typography variant="h3" textAlign={"right"} flex={1}>
-                1,247,500원
-              </Typography>
-            </PriceWrapper>
-            <PriceWrapper>
-              <Typography variant="h3" flex={1}>
-                정가
-              </Typography>
-              <Typography variant="h3" textAlign={"right"} flex={1}>
-                1,247,500원
-              </Typography>
-            </PriceWrapper>
           </MainContentHeader>
           <Description>
-            <PriceWrapper>
-              <Typography variant="h4" flex={1}>
-                역대최저가
-              </Typography>
-              <Typography variant="h4" textAlign={"right"} flex={1}>
-                1,147,500원
-              </Typography>
-            </PriceWrapper>
-            <PriceWrapper>
-              <Typography variant="h4" flex={1}>
-                최근평균가
-              </Typography>
-              <Typography variant="h4" textAlign={"right"} flex={1}>
-                1,347,500원
-              </Typography>
-            </PriceWrapper>
+            <Typography variant="h4" flex={1} marginBottom={0}>
+              수정 메시지
+            </Typography>
+            <TextField fullWidth sx={{height: '100%'}}/>
           </Description>
         </MainContent>
-        <ActionContent>
-          <Button fullWidth variant="contained" size="large">
-            최저가로 사러가기
-          </Button>
-        </ActionContent>
       </Content>
     </StyledContainer>
   );
@@ -133,7 +76,6 @@ const MainContent = styled.div`
   flex: 1;
   padding: 20px 0px;
   width: 100%;
-  justify-content: space-between;
 `;
 const MainContentHeader = styled.div`
   display: flex;
