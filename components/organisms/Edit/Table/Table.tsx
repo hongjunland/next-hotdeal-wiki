@@ -4,20 +4,24 @@ import { Box, Button, Switch, Typography } from "@mui/material";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import LinkIcon from "@mui/icons-material/Link";
 import Link from "next/link";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 
+interface TableRow extends Hotdeal {
+  isEditable?: boolean;
+}
 export default function Table() {
   const [rows, setRows] = useState(hotdealsData);
 
   const handleAddRow = () => {
     const newRow = {
       id: rows.length + 1,
-      date: '2023-06-15 10:23',
-      title: '[쿠팡] 아이폰14프로 128 (1,247,500원)',
-      status: '핫딜',
-      price: 1347320,
-      url: 'http://localhost:3000/wiki/1',
+      date: "2023-06-15 10:23",
+      title: "ㄴㅇㄴ",
+      status: "",
+      price: 0,
+      url: "",
+      isEditable: true,
     };
 
     setRows((prevRows) => [newRow, ...prevRows]);
@@ -28,15 +32,22 @@ export default function Table() {
         <Typography variant="h3" flex={1} marginBottom={0}>
           핫딜 목록
         </Typography>
-        <Button size="large" variant="contained" startIcon={<AddIcon/>} onClick={handleAddRow}>
+        <Button
+          size="large"
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleAddRow}
+        >
           핫딜 추가
         </Button>
       </TableHeader>
       <Box width={"100%"}>
-        <DataGrid columns={columns} rows={rows} 
-        initialState={{
-          pagination: { paginationModel: { pageSize: 10 } },
-        }}
+        <DataGrid
+          columns={columns}
+          rows={rows}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10 } },
+          }}
         />
       </Box>
     </StyledContainer>
@@ -95,8 +106,8 @@ const columns = [
     editable: false,
     renderCell: (props: GridRenderCellParams) => {
       return (
-        <Box justifyContent={'center'} alignContent={'center'}>
-          <Link href={props.value} style={{display: 'flex'}}>
+        <Box justifyContent={"center"} alignContent={"center"}>
+          <Link href={props.value} style={{ display: "flex" }}>
             <LinkIcon sx={{ color: "#333" }} />
           </Link>
         </Box>

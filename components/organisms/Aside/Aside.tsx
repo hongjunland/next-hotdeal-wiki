@@ -16,6 +16,7 @@ export default function Aside() {
     </StyledAside>
   );
 }
+
 const StyledAside = styled.aside`
   position: sticky;
   top: 0;
