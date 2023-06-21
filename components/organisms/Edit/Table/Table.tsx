@@ -32,14 +32,6 @@ export default function Table() {
         <Typography variant="h3" flex={1} marginBottom={0}>
           핫딜 목록
         </Typography>
-        <Button
-          size="large"
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAddRow}
-        >
-          핫딜 추가
-        </Button>
       </TableHeader>
       <Box width={"100%"}>
         <DataGrid

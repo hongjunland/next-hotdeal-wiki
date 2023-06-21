@@ -1,16 +1,9 @@
 import Container from "@/components/atoms/Container";
 import styled from "@emotion/styled";
 import {
-  Button,
-  IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Figure from "@/components/molecules/Figure";
