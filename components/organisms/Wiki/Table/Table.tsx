@@ -1,9 +1,21 @@
 import Container from "@/components/atoms/Container";
 import styled from "@emotion/styled";
-import { Box, Button, Switch, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  Popover,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import LinkIcon from "@mui/icons-material/Link";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 
 export default function Table() {
   return (
@@ -14,10 +26,12 @@ export default function Table() {
         </Typography>
       </TableHeader>
       <Box width={"100%"}>
-        <DataGrid columns={columns} rows={hotdealsData} 
-        initialState={{
-          pagination: { paginationModel: { pageSize: 10 } },
-        }}
+        <DataGrid
+          columns={columns}
+          rows={hotdealsData}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10 } },
+          }}
         />
       </Box>
     </StyledContainer>
@@ -48,6 +62,15 @@ const columns = [
     width: 500,
     editable: false,
     sortable: false,
+    renderCell: (props: GridRenderCellParams) => {
+      return (
+        <Box justifyContent={"center"} alignContent={"center"}>
+          <Link href={props.value} style={{ display: "flex" }}>
+            {props.row.title}
+          </Link>
+        </Box>
+      );
+    },
   },
   {
     field: "status",
@@ -64,23 +87,46 @@ const columns = [
     editable: false,
   },
   {
-    field: "url",
-    headerName: "URL",
+    field: "action",
+    headerName: "",
     description: "This column has a value getter and is not sortable.",
     sortable: false,
     width: 36,
     editable: false,
-    renderCell: (props: GridRenderCellParams) => {
-      return (
-        <Box justifyContent={'center'} alignContent={'center'}>
-          <Link href={props.value} style={{display: 'flex'}}>
-            <LinkIcon sx={{ color: "#333" }} />
-          </Link>
-        </Box>
-      );
-    },
+    renderCell: (props: GridRenderCellParams) => <DeleteCell />,
   },
 ];
+function DeleteCell() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const router = useRouter();
+
+  const handleButtonClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <Box justifyContent={"center"} alignContent={"center"}>
+      <IconButton onClick={handleButtonClick}>
+        <DisabledByDefaultIcon fontSize="medium" />
+      </IconButton>
+      <Popover
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <Box padding={'15px 5px 0 5px'} display={'flex'} gap={'5px'}>
+          <TextField label="비밀번호" type="password" size="medium" />
+          <Button size="large" variant="contained" color="secondary" sx={{marginBottom: '16px'}}>
+            확인
+          </Button>
+        </Box>
+      </Popover>
+    </Box>
+  );
+}
 interface Hotdeal {
   id: number;
   date: string;
