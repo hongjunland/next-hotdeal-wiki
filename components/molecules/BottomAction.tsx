@@ -2,8 +2,8 @@ import { Box, Button, styled } from "@mui/material";
 interface Props {
   left?: string;
   right?: string;
-  leftAction: () => void;
-  rightAction: () => void;
+  leftAction?: () => void;
+  rightAction?: () => void;
   disabled?: boolean;
 }
 export default function BottomAction({
@@ -19,6 +19,7 @@ export default function BottomAction({
       gap={"5px"}
       sx={{ button: { flex: 1 } }}
       width={"100%"}
+      paddingTop={"20px"}
     >
       {left && (
         <CancelButton variant="contained" size="large" onClick={leftAction}>
