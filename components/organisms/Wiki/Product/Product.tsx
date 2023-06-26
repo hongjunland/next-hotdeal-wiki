@@ -37,7 +37,7 @@ export default function Product() {
               <Typography variant="h1" flex={1} marginBottom={0}>
                 IPhone14 Pro 128G 블랙
               </Typography>
-              <IconButton
+              {/* <IconButton
                 sx={{
                   border: "solid 1px #cccccc",
                   borderRadius: "4px",
@@ -49,8 +49,8 @@ export default function Product() {
                 onClick={handleButtonClick}
               >
                 <MoreHorizIcon fontSize="medium" />
-              </IconButton>
-              <Menu
+              </IconButton> */}
+              {/* <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
@@ -59,9 +59,9 @@ export default function Product() {
                   <ListItemIcon>
                     <EditIcon fontSize="small" />
                   </ListItemIcon>
-                  위키 편집
+                  핫딜 추가
                 </MenuItem>
-              </Menu>
+              </Menu> */}
             </MainContentTitle>
             <PriceWrapper>
               <Typography variant="h3" flex={1}>

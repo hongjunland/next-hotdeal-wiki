@@ -20,24 +20,28 @@ export default function BottomAction({
       sx={{ button: { flex: 1 } }}
       width={"100%"}
     >
-      <CancelButton variant="contained" size="large" onClick={leftAction}>
-        {left}
-      </CancelButton>
-      <SubmitButton
-        variant="contained"
-        size="large"
-        onClick={rightAction}
-        disabled={disabled}
-      >
-        {right}
-      </SubmitButton>
+      {left && (
+        <CancelButton variant="contained" size="large" onClick={leftAction}>
+          {left}
+        </CancelButton>
+      )}
+      {right && (
+        <SubmitButton
+          variant="contained"
+          size="large"
+          onClick={rightAction}
+          disabled={disabled}
+        >
+          {right}
+        </SubmitButton>
+      )}
     </Box>
   );
 }
 
 BottomAction.defaultProps = {
-  left: "취소",
-  right: "저장",
+  // left: "취소",
+  // right: "저장",
   disabled: false,
 };
 

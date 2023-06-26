@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
-import LinkIcon from "@mui/icons-material/Link";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -112,18 +111,18 @@ function DeleteCell() {
       <IconButton onClick={handleButtonClick}>
         <DisabledByDefaultIcon fontSize="medium" />
       </IconButton>
-      <Popover
+        <Popover
         anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
         <Box padding={'15px 5px 0 5px'} display={'flex'} gap={'5px'}>
           <TextField label="비밀번호" type="password" size="medium" />
           <Button size="large" variant="contained" color="secondary" sx={{marginBottom: '16px'}}>
             확인
-          </Button>
-        </Box>
-      </Popover>
+              </Button>
+          </Box>
+        </Popover>
     </Box>
   );
 }

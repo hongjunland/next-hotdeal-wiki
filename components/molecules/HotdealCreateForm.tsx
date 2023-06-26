@@ -7,7 +7,7 @@ export default function HotdealCreateForm() {
     <Box
       width={"100%"}
     >
-      <Typography variant="h1">IPhone14 Pro 128G 블랙 - 핫딜 추가</Typography>
+      <Typography variant="h3">핫딜 추가</Typography>
       <Grid container spacing={1} marginTop={"5px"}>
         <Grid item xs={2} flexDirection={"column"}>
           <TextField label="닉네임" />
